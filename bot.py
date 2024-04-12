@@ -4,11 +4,16 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from places_api import get_places
+from places_api import get_places, get_nearby_places
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
+PLACES_TYPES = [
+    "restaurant",
+    "hotel",
+    "museum",
+]
 
 bot = commands.Bot(
     command_prefix='!',
@@ -49,7 +54,8 @@ async def travel(ctx, destination):
 
     await ctx.send(f"Traveling to {place['name']}!")
 
-
+    nearby_places = {place_type: get_nearby_places(place_type, place['latitude'], place['longitude']) for place_type in PLACES_TYPES}
+    print(nearby_places)
 
 
 bot.run(TOKEN)
