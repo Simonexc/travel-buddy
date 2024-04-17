@@ -28,7 +28,7 @@ async def on_ready():
 
 @bot.command()
 async def travel(ctx, destination):
-    places = get_places(destination)
+    places = await get_places(destination)
     if not places:
         await ctx.send(f"no places found for {destination}")
         return
@@ -54,7 +54,7 @@ async def travel(ctx, destination):
 
     await ctx.send(f"Traveling to {place['name']}!")
 
-    nearby_places = {place_type: get_nearby_places(place_type, place['latitude'], place['longitude']) for place_type in PLACES_TYPES}
+    nearby_places = {place_type: await get_nearby_places(place_type, place['latitude'], place['longitude']) for place_type in PLACES_TYPES}
     print(nearby_places)
 
 
