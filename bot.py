@@ -3,7 +3,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-
+from gemmini_integration import generate_text
 from places_api import get_places, get_nearby_places
 
 load_dotenv()
@@ -56,6 +56,15 @@ async def travel(ctx, destination):
 
     nearby_places = {place_type: await get_nearby_places(place_type, place['latitude'], place['longitude']) for place_type in PLACES_TYPES}
     print(nearby_places)
+    #TO DO: Add further error handling
+    
+    try:
+        gemmini_output = generate_text(place['name'], nearby_places)
+        for i in range(0, len(gemmini_output), 1800):
+            await ctx.send(gemmini_output[i:i+1800])
+    except discord.HTTPException as e:
+        await ctx.send("Sorry something went wrong (HTTP bad request)")
+        print(f"An error occurred: {e}")
 
 
 bot.run(TOKEN)
