@@ -29,16 +29,17 @@ resource "google_compute_region_instance_group_manager" "bot" {
   version {
     instance_template = google_compute_instance_template.bot.self_link
   }
-  target_size        = 3  # Sets the initial size but does not manage autoscaling
+  target_size        = 1  # Sets the initial size but does not manage autoscaling
+  depends_on = [google_compute_instance_template.bot]
 }
 
 resource "google_compute_region_autoscaler" "bot" {
   name   = "discord-bot-autoscaler"
   target = google_compute_region_instance_group_manager.bot.self_link
-  zone   = var.region
+  region = var.region
 
   autoscaling_policy {
-    min_replicas    = 3
+    min_replicas    = 1
     max_replicas    = var.max_replicas
     cooldown_period = 60
 
@@ -46,4 +47,5 @@ resource "google_compute_region_autoscaler" "bot" {
       target = 0.5  # Target CPU utilization of 50%
     }
   }
+    depends_on = [google_compute_region_instance_group_manager.bot]
 }

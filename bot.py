@@ -5,6 +5,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from gemmini_integration import generate_text
 from places_api import get_places, get_nearby_places
+import logging
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -19,11 +20,12 @@ bot = commands.Bot(
     command_prefix='!',
     intents=discord.Intents(messages=True, reactions=True, message_content=True),
 )
+logger = logging.getLogger('discord-bot')
 
 
 @bot.event
 async def on_ready():
-    print("Bot is ready")
+    logger.info("Bot is ready")
 
 
 @bot.command()
@@ -31,6 +33,7 @@ async def travel(ctx, destination):
     places = await get_places(destination)
     if not places:
         await ctx.send(f"no places found for {destination}")
+        logger.info(f"No places found for {destination}")
         return
     if len(places) > 1:
         places = places[:9]
@@ -55,7 +58,6 @@ async def travel(ctx, destination):
     await ctx.send(f"Traveling to {place['name']}!")
 
     nearby_places = {place_type: await get_nearby_places(place_type, place['latitude'], place['longitude']) for place_type in PLACES_TYPES}
-    print(nearby_places)
     #TO DO: Add further error handling
     
     try:
@@ -64,7 +66,6 @@ async def travel(ctx, destination):
             await ctx.send(gemmini_output[i:i+1800])
     except discord.HTTPException as e:
         await ctx.send("Sorry something went wrong (HTTP bad request)")
-        print(f"An error occurred: {e}")
-
+        logger.error(f"An error occurred: {e}")
 
 bot.run(TOKEN)

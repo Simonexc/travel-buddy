@@ -5,9 +5,13 @@
 #The authentication
 
 import vertexai
-from vertexai.generative_models import GenerativeModel, Part
-PROJECT_ID="cloud-computing-419916"
-LOCATION="europe-west3"
+from vertexai.generative_models import GenerativeModel
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+PROJECT_ID = os.getenv('PROJECT_ID')
+LOCATION = os.getenv('REGION')
 
 
 def parse_entries(data):
