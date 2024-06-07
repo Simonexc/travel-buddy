@@ -22,6 +22,8 @@ export DISCORD_GUILD=$(gcloud secrets versions access latest --secret="discord-g
 export GCP_PLACES_API_KEY=$(gcloud secrets versions access latest --secret="gcp-places-api-key")
 export PROJECT_ID=$(gcloud secrets versions access latest --secret="project-id")
 export REGION=$(gcloud secrets versions access latest --secret="region")
+export SPANNER_ID=$(gcloud secrets versions access latest --secret="spanner-id")
+export SPANNER_DATABASE_ID=$(gcloud secrets versions access latest --secret="spanner-database-id")
 
 # Run your bot using Python
 nohup python3 bot.py &

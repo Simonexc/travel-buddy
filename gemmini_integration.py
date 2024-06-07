@@ -31,13 +31,14 @@ def parse_entries(data):
     print(f"{result}")
     return result
 
-def generate_text(city:str, list_of_locations:dict) -> str:
+
+def generate_text(city:str, adventure_type: str, duration: int, list_of_locations:dict) -> str:
     # Initialize Vertex AI
     vertexai.init(project=PROJECT_ID, location=LOCATION)
     # Load the model
     multimodal_model = GenerativeModel("gemini-1.0-pro")
     parsed_locations = parse_entries(list_of_locations)
-    response = multimodal_model.generate_content(f"Pretend you're travel agent that needs to create 3-day in {city} plan for user. You need use locations and their descriptions from the following Python dictionary {parsed_locations}. During 3-day you need propose for the user restaurant for attractions each day and hotel. Must be 1800 or fewer in number of characters.")
+    response = multimodal_model.generate_content(f"Pretend you're travel agent that needs to create {duration}-day in {city} plan for user. They prefer the trip type {adventure_type}. You need use locations and their descriptions from the following Python dictionary {parsed_locations}. During {duration}-day you need propose for the user restaurant for attractions each day and hotel. Must be 1800 or fewer in number of characters.")
     print(response)
     return response.text
 

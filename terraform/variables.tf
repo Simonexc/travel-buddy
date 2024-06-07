@@ -30,3 +30,13 @@ variable "max_replicas" {
   description = "The maximum number of replicas for the discord bot."
   default     = 10
 }
+
+variable "spanner_name" {
+  description = "The name of the Spanner instance."
+  default     = "discord-bot-spanner"
+}
+
+variable "spanner_database_name" {
+  description = "The name of the Spanner database."
+  default     = "discord-bot-db"
+}

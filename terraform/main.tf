@@ -29,7 +29,6 @@ resource "google_compute_region_instance_group_manager" "bot" {
   version {
     instance_template = google_compute_instance_template.bot.self_link
   }
-  target_size        = 1  # Sets the initial size but does not manage autoscaling
   depends_on = [google_compute_instance_template.bot]
 }
 
